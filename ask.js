@@ -1,36 +1,31 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "الطريقة غير مسموحة" });
-  }
-
-  const { question, context } = req.body;
+async function ask() {
+  const question = document.getElementById("question").value;
+  const answerDiv = document.getElementById("answer");
+  answerDiv.innerText = "⏳ جاري البحث...";
 
   try {
-    const response = await fetch(
-      "https://api-inference.huggingface.co/models/deepset/xlm-roberta-base-squad2",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.HF_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: {
-            question: question,
-            context: context,
-          },
-        }),
-      }
-    );
+    const response = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer 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",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        inputs: question
+      })
+    });
 
-    const data = await response.json();
+    const result = await response.json();
+    console.log(result);
 
-    if (data && data.answer) {
-      res.status(200).json({ answer: data.answer });
+    if (result && result[0] && result[0].generated_text) {
+      answerDiv.innerText = result[0].generated_text;
     } else {
-      res.status(200).json({ answer: "لم أتمكن من العثور على جواب واضح." });
+      answerDiv.innerText = "😔 لم أتمكن من إيجاد إجابة مناسبة.";
     }
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    answerDiv.innerText = "⚠️ حدث خطأ أثناء الاتصال بالخادم.";
   }
 }
