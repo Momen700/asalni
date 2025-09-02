@@ -1,31 +1,53 @@
-async function ask() {
-  const question = document.getElementById("question").value;
-  const answerDiv = document.getElementById("answer");
-  answerDiv.innerText = "⏳ جاري البحث...";
+const HF_API_KEY = "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";
+
+// النموذج اللي رح نستخدمه (سريع ويدعم العربية كويس)
+const MODEL = "mistralai/Mistral-7B-Instruct-v0.2";
+
+async function askQuestion() {
+  const question = document.getElementById("question").value.trim();
+  const answerBox = document.getElementById("answer");
+
+  if (!question) {
+    answerBox.innerText = "⚠️ الرجاء كتابة سؤال أولاً";
+    return;
+  }
+
+  answerBox.innerText = "⏳ جارٍ البحث...";
 
   try {
-    const response = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer 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",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        inputs: question
-      })
-    });
+    const response = await fetch(
+      `https://api-inference.huggingface.co/models/${MODEL}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${HF_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inputs: question,
+          parameters: {
+            max_new_tokens: 200,
+            temperature: 0.5,
+          },
+        }),
+      }
+    );
 
-    const result = await response.json();
-    console.log(result);
-
-    if (result && result[0] && result[0].generated_text) {
-      answerDiv.innerText = result[0].generated_text;
-    } else {
-      answerDiv.innerText = "😔 لم أتمكن من إيجاد إجابة مناسبة.";
+    if (!response.ok) {
+      answerBox.innerText = "❌ خطأ في الاتصال بالنموذج";
+      return;
     }
 
+    const result = await response.json();
+    console.log(result); // للتجربة فقط
+
+    if (result && result[0] && result[0].generated_text) {
+      answerBox.innerText = result[0].generated_text;
+    } else {
+      answerBox.innerText = "😢 لم أجد جواباً واضحاً، جرّب صياغة السؤال بطريقة أخرى";
+    }
   } catch (error) {
     console.error(error);
-    answerDiv.innerText = "⚠️ حدث خطأ أثناء الاتصال بالخادم.";
+    answerBox.innerText = "⚠️ حدث خطأ أثناء البحث";
   }
 }
