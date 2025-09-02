@@ -3,55 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع اسألني</title>
+  <title>اسألني</title>
   <style>
     body {
-      font-family: "Tahoma", sans-serif;
-      direction: rtl;
+      font-family: "Tahoma", Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      background: #f5f5f5;
+      direction: rtl;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    main {
+      margin: 30px auto;
+      max-width: 600px;
       padding: 20px;
     }
-    h1 {
-      color: #333;
-    }
     input {
+      width: 80%;
       padding: 10px;
-      width: 60%;
-      margin: 10px;
-      border-radius: 8px;
+      font-size: 16px;
       border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
     }
     button {
       padding: 10px 20px;
+      font-size: 16px;
       border: none;
-      background: #2196F3;
-      color: white;
       border-radius: 8px;
+      background: #3498db;
+      color: #fff;
       cursor: pointer;
     }
     button:hover {
-      background: #1976D2;
+      background: #2980b9;
     }
     #answer {
       margin-top: 20px;
-      padding: 15px;
-      background: white;
+      background: #fff;
+      border: 1px solid #ddd;
       border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      padding: 15px;
       min-height: 50px;
+      font-size: 18px;
+      color: #333;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>📚 مرحباً بك في موقع "اسألني"</h1>
-  <p>اكتب سؤالك وسيتم الإجابة عليه فوراً باستخدام الذكاء الاصطناعي</p>
-
-  <input type="text" id="question" placeholder="اكتب سؤالك هنا...">
-  <button onclick="ask()">ابحث</button>
-
-  <div id="answer">الجواب سيظهر هنا...</div>
-
+  <header>📘 موقع اسألني</header>
+  <main>
+    <input type="text" id="question" placeholder="اكتب سؤالك هنا..." />
+    <br>
+    <button onclick="askQuestion()">ابحث</button>
+    <div id="answer">💡 ستظهر الإجابة هنا</div>
+  </main>
   <script src="ask.js"></script>
 </body>
 </html>
