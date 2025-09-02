@@ -2,79 +2,56 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>اسألني</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موقع اسألني</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      text-align: center;
+      font-family: "Tahoma", sans-serif;
       direction: rtl;
-    }
-    .container {
-      margin: 50px auto;
-      max-width: 600px;
-      background: white;
+      text-align: center;
+      background: #f5f5f5;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    input, button {
+    h1 {
+      color: #333;
+    }
+    input {
       padding: 10px;
-      margin: 5px;
-      width: 80%;
-      font-size: 16px;
+      width: 60%;
+      margin: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
     button {
-      width: 30%;
-      cursor: pointer;
-      background: #007bff;
-      color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 5px;
+      background: #2196F3;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1976D2;
     }
     #answer {
       margin-top: 20px;
-      font-weight: bold;
-      color: green;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      min-height: 50px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📘 اسألني</h1>
-    <p>اكتب سؤالك وسيظهر الجواب من الكتاب</p>
-    <input type="text" id="question" placeholder="اكتب سؤالك هنا...">
-    <br>
-    <button onclick="askQuestion()">ابحث</button>
-    <div id="answer"></div>
-  </div>
+  <h1>📚 مرحباً بك في موقع "اسألني"</h1>
+  <p>اكتب سؤالك وسيتم الإجابة عليه فوراً باستخدام الذكاء الاصطناعي</p>
 
-  <script>
-    async function askQuestion() {
-      const question = document.getElementById("question").value;
-      const answerDiv = document.getElementById("answer");
-      answerDiv.innerText = "⏳ جاري البحث...";
+  <input type="text" id="question" placeholder="اكتب سؤالك هنا...">
+  <button onclick="ask()">ابحث</button>
 
-      try {
-        const response = await fetch("/api/ask", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question: question,
-            context: "هذا مكان النص من الكتاب وسنضيفه لاحقا"
-          })
-        });
+  <div id="answer">الجواب سيظهر هنا...</div>
 
-        const data = await response.json();
-        if (data.answer) {
-          answerDiv.innerText = "✅ الجواب: " + data.answer;
-        } else {
-          answerDiv.innerText = "❌ لم أجد جواباً واضحاً.";
-        }
-      } catch (err) {
-        answerDiv.innerText = "⚠ خطأ: " + err.message;
-      }
-    }
-  </script>
+  <script src="ask.js"></script>
 </body>
 </html>
